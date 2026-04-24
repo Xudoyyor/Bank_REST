@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: xudoyyor
+      changes:
+        - addColumn:
+            tableName: audit_logs
+            columns:
+              - column:
+                  name: performed_by
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

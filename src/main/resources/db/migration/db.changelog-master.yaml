@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/changelog/01-create-users-table.yaml
+  - include:
+      file: db/migration/changelog/02-create-cards-table.yaml
+  - include:
+      file: db/migration/changelog/03-create-auditLog-table.yaml
+  - include:
+      file: db/migration/changelog/04-create-transaction-table.yaml
+  - include:
+      file: db/migration/changelog/05-add-performed-by-to-auditlog.yaml

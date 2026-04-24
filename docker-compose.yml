@@ -4,8 +4,8 @@ services:
     image: postgres:15
     container_name: bank_rest_db
     environment:
-      - POSTGRES_DB=bank_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=bank-rest_db
+      - POSTGRES_USER=hudoyor
+      - POSTGRES_PASSWORD=root
     ports:
-      - "5432:5432"
+      - "5442:5432"
