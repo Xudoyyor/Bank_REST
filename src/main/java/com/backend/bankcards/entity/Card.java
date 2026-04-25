@@ -1,6 +1,8 @@
 package com.backend.bankcards.entity;
 
+import com.backend.bankcards.enums.CardCategory;
 import com.backend.bankcards.enums.CardStatus;
+import com.backend.bankcards.enums.CardType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -17,7 +19,6 @@ public class Card {
     private Long id;
 
     @NotBlank(message = "Card number is required")
-    @Size(min = 16, max = 19, message = "Card number must be between 16-19 digits")
     @Column(name = "card_number", nullable = false, unique = true)
     private String cardNumber;
 
@@ -28,6 +29,7 @@ public class Card {
     @NotBlank(message = "Owner name is required")
     @Size(max = 100)
     @Column(name = "owner_name", nullable = false)
+    @org.hibernate.annotations.JdbcTypeCode(java.sql.Types.VARCHAR)
     private String ownerName;
 
 
@@ -62,12 +64,17 @@ public class Card {
     private LocalDateTime updatedAt;
 
 
-    @Column(name = "blocked_at")
-    private LocalDateTime blockedAt;
 
-    @Column(name = "blocked_by")
-    private Long blockedBy;
+    @Column(name = "status_changed_by")
+    private String statusChangedBy;
 
+    public String getStatusChangedBy() {
+        return statusChangedBy;
+    }
+
+    public void setStatusChangedBy(String statusChangedBy) {
+        this.statusChangedBy = statusChangedBy;
+    }
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -79,10 +86,60 @@ public class Card {
         this.balance = this.balance == null ? BigDecimal.ZERO : this.balance;
         this.isDeleted = false;
 
+    }
 
-        if (this.cardNumber != null && this.cardNumber.length() >= 4) {
-            this.maskedNumber = "**** **** **** " + this.cardNumber.substring(this.cardNumber.length() - 4);
-        }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "card_category", nullable = false)
+    private CardCategory cardCategory;
+
+
+    @Column(name = "bank_name", nullable = false)
+    @org.hibernate.annotations.JdbcTypeCode(java.sql.Types.VARCHAR)
+    private String bankName;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "card_type")
+    private CardType cardType;
+
+    @Column(name = "cvv_hash", nullable = false)
+    private String cvvHash;
+
+
+    public String getCvvHash() {
+        return cvvHash;
+    }
+
+    public void setCvvHash(String cvvHash) {
+        this.cvvHash = cvvHash;
+    }
+
+
+
+
+
+    public CardCategory getCardCategory() {
+        return cardCategory;
+    }
+
+    public void setCardCategory(CardCategory cardCategory) {
+        this.cardCategory = cardCategory;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public CardType getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(CardType cardType) {
+        this.cardType = cardType;
     }
 
     @PreUpdate
@@ -171,21 +228,9 @@ public class Card {
         this.updatedAt = updatedAt;
     }
 
-    public LocalDateTime getBlockedAt() {
-        return blockedAt;
-    }
 
-    public void setBlockedAt(LocalDateTime blockedAt) {
-        this.blockedAt = blockedAt;
-    }
 
-    public Long getBlockedBy() {
-        return blockedBy;
-    }
 
-    public void setBlockedBy(Long blockedBy) {
-        this.blockedBy = blockedBy;
-    }
 
     public Boolean getDeleted() {
         return isDeleted;

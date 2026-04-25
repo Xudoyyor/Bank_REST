@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260425-add-description-to-audit-log
+      author: hudoyor
+      changes:
+        - addColumn:
+            tableName: audit_logs
+            columns:
+              - column:
+                  name: description
+                  type: VARCHAR(500)
+                  remarks: "More information about the movement"

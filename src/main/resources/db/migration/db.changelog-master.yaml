@@ -9,3 +9,7 @@ databaseChangeLog:
       file: db/migration/changelog/04-create-transaction-table.yaml
   - include:
       file: db/migration/changelog/05-add-performed-by-to-auditlog.yaml
+  - include:
+      file: db/migration/changelog/db.changelog-add-card-metadata.yaml
+  - include:
+      file: db/migration/changelog/db.changelog-add-description-to-audit.yaml

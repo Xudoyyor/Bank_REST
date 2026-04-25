@@ -45,6 +45,17 @@ public class AuditLog {
     @Column(name = "performed_by")
     private String performedBy;
 
+    @Column(name = "description")
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getPerformedBy() {
         return performedBy;
     }

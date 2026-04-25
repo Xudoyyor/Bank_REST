@@ -1,4 +1,4 @@
-package com.backend.bankcards.dto;
+package com.backend.bankcards.dto.usersDTO;
 
 public record UserUpdateDTO(
         String firstName,

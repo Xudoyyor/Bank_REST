@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-category-and-company-to-cards-v2
+      author: xudoyyor
+      changes:
+        - addColumn:
+            tableName: cards
+            columns:
+              - column:
+                  name: card_category
+                  type: varchar(50)
+                  defaultValue: "UZCARD"
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: bank_name
+                  type: varchar(100)
+                  defaultValue: "UNKNOWN"
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: card_type
+                  type: varchar(50)
+                  defaultValue: "Standart"
+                  constraints:
+                    nullable: false
