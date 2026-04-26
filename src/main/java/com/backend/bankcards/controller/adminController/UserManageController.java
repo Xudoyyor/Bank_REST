@@ -1,6 +1,7 @@
 package com.backend.bankcards.controller.adminController;
 
 import com.backend.bankcards.dto.AuditLogResponseDTO;
+import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
 import com.backend.bankcards.dto.usersDTO.UserResponseDTO;
 import com.backend.bankcards.dto.usersDTO.UserSearchFilter;
 import com.backend.bankcards.dto.usersDTO.UserUpdateDTO;
@@ -75,6 +76,23 @@ public class UserManageController {
     public ResponseEntity<List<AuditLogResponseDTO>> getUserAuditHistory(@PathVariable Long userId) {
         List<AuditLogResponseDTO> history = userManageService.getUserAuditHistory(userId);
         return ResponseEntity.ok(history);
+    }
+
+
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<UserResponseDTO>> searchUsers(@ModelAttribute UserSearchFilter filter) {
+        log.info("Admin searching users with filter: {}", filter);
+        Page<UserResponseDTO> result = userManageService.searchUsers(filter);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}/cards")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<CardResponseDTO>> getUserCards(@PathVariable Long id) {
+        log.info("REST request to get all cards for user ID: {}", id);
+        List<CardResponseDTO> cards = userManageService.getUserCards(id);
+        return ResponseEntity.ok(cards);
     }
 }
 

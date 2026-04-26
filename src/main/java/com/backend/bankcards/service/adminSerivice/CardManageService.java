@@ -4,6 +4,7 @@ import com.backend.bankcards.dto.AuditLogResponseDTO;
 import com.backend.bankcards.dto.cardsDTO.CardCreateRequestDTO;
 import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
 import com.backend.bankcards.dto.cardsDTO.CardSearchFilter;
+import com.backend.bankcards.dto.cardsDTO.TransferRequest;
 import com.backend.bankcards.entity.AuditLog;
 import org.springframework.data.domain.Page;
 
@@ -16,6 +17,9 @@ public interface CardManageService {
     void activateCard(Long cardId);
     List<AuditLogResponseDTO> getCardAuditHistory(Long cardId);
     List<CardResponseDTO> getTopBalanceCards(int limit);
+
+    Page<CardResponseDTO> searchCards(CardSearchFilter filter);
+
 
 
 }

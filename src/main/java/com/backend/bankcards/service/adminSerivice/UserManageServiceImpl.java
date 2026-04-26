@@ -1,6 +1,7 @@
 package com.backend.bankcards.service.adminSerivice;
 
 import com.backend.bankcards.dto.AuditLogResponseDTO;
+import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
 import com.backend.bankcards.dto.usersDTO.UserResponseDTO;
 import com.backend.bankcards.dto.usersDTO.UserSearchFilter;
 import com.backend.bankcards.dto.usersDTO.UserUpdateDTO;
@@ -13,6 +14,9 @@ import com.backend.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -210,6 +214,59 @@ public class UserManageServiceImpl implements UserManageService{
         log.setCreatedAt(LocalDateTime.now());
 
         auditLogRepo.save(log);
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UserResponseDTO> searchUsers(UserSearchFilter filter) {
+        int pageIndex = (filter.page() == null) ? 0 : filter.page();
+        int pageSize = (filter.size() == null || filter.size() <= 0) ? 10 : filter.size();
+
+        Pageable pageable = PageRequest.of(Math.max(pageIndex, 0), pageSize);
+
+        // 2. Repository-dan ma'lumotni qidirish
+        Page<UserEntity> users = userRepo.searchByFilter(
+                filter.query(),
+                filter.email(),
+                filter.phone(),
+                filter.role(),
+                filter.isActive(),
+                pageable
+        );
+
+        // 3. Entity-ni ResponseDTO-ga o'girish
+        return users.map(user -> new UserResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getRole(),
+                user.getActive(),
+                user.getCreatedAt()
+        ));
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<CardResponseDTO> getUserCards(Long userId) {
+        UserEntity user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
+        return user.getCards().stream()
+                .map(card -> new CardResponseDTO(
+                        card.getId(),
+                        card.getMaskedNumber(),
+                        card.getExpirationDate(),
+                        card.getBalance(),
+                        card.getStatus(),
+                        card.getCardType(),
+                        card.getCardCategory(),
+                        card.getOwnerName(),
+                        card.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 
 

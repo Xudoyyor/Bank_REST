@@ -3,6 +3,7 @@ package com.backend.bankcards.dto.cardsDTO;
 import com.backend.bankcards.enums.CardCategory;
 import com.backend.bankcards.enums.CardStatus;
 import com.backend.bankcards.enums.CardType;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 public record CardSearchFilter(
         String cardHolderName,
@@ -10,6 +11,6 @@ public record CardSearchFilter(
         CardStatus status,
         CardType cardType,
         CardCategory cardCategory,
-        int page,
-        int size
+        Integer page,
+        Integer size
 ) {}

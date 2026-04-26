@@ -216,6 +216,25 @@ public class CardManageServiceImpl implements CardManageService {
     }
 
 
+    @Override
+    public Page<CardResponseDTO> searchCards(CardSearchFilter filter) {
+
+        int pageIndex = (filter.page() == null) ? 0 : filter.page();
+        int pageSize = (filter.size() == null || filter.size() <= 0) ? 10 : filter.size();
+
+        Pageable pageable = PageRequest.of(Math.max(pageIndex, 0), pageSize);
+
+        Page<Card> cardEntities = cardRepo.searchCards(
+                filter.cardHolderName(),
+                filter.bankName(),
+                filter.status() != null ? filter.status().name() : null,
+                filter.cardType() != null ? filter.cardType().name() : null,
+                filter.cardCategory() != null ? filter.cardCategory().name() : null,
+                pageable
+        );
+        return cardEntities.map(this::mapToResponse);
+    }
+
 
 
 }

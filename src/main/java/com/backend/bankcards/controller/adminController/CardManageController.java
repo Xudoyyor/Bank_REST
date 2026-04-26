@@ -72,4 +72,12 @@ public class CardManageController {
         return ResponseEntity.ok(topCards);
     }
 
+    @GetMapping("/search")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<CardResponseDTO>> searchCards(@ModelAttribute CardSearchFilter filter) {
+        log.info("REST request to search cards with filter: {}", filter);
+        Page<CardResponseDTO> result = cardManageService.searchCards(filter);
+        return ResponseEntity.ok(result);
+    }
+
 }

@@ -1,53 +1,31 @@
 package com.backend.bankcards.controller.userController;
-import com.backend.bankcards.entity.UserEntity;
-import com.backend.bankcards.repository.UserRepository;
-import com.backend.bankcards.service.securityService.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.backend.bankcards.dto.authDTO.AuthResponse;
+import com.backend.bankcards.dto.authDTO.LoginRequest;
+import com.backend.bankcards.dto.authDTO.RegisterRequest;
+import com.backend.bankcards.service.userService.AuthService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private UserRepository repo;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authManager;
+    private final AuthService authService;
 
     @PostMapping("/register")
-    public String register(@RequestBody UserEntity user) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        repo.save(user);
-
-        return jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest request) {
+        authService.register(request);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserEntity request) {
-
-        authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-
-        UserEntity user = repo.findByUsername(request.getUsername()).orElseThrow();
-
-        return jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 }

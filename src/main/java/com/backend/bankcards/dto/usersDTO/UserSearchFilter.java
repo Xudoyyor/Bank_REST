@@ -8,7 +8,7 @@ public record UserSearchFilter(
         String phone,
         Role role,
         Boolean isActive,
-        int page,
-        int size
+        Integer page,
+        Integer size
 ) {
 }

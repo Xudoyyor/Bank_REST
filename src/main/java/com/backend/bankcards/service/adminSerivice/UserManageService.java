@@ -1,6 +1,7 @@
 package com.backend.bankcards.service.adminSerivice;
 
 import com.backend.bankcards.dto.AuditLogResponseDTO;
+import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
 import com.backend.bankcards.dto.usersDTO.UserResponseDTO;
 import com.backend.bankcards.dto.usersDTO.UserSearchFilter;
 import com.backend.bankcards.dto.usersDTO.UserUpdateDTO;
@@ -23,4 +24,6 @@ public interface UserManageService {
 
     List<AuditLogResponseDTO> getUserAuditHistory(Long userId);
 
+    Page<UserResponseDTO> searchUsers(UserSearchFilter filter);
+    List<CardResponseDTO> getUserCards(Long userId);
 }

@@ -40,4 +40,5 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     @Query("SELECT c FROM Card c WHERE c.isDeleted = false ORDER BY c.balance DESC")
     List<Card> findTopBalanceCards(Pageable pageable);
 
+    List<Card> findAllByUserUsername(String username);
 }
