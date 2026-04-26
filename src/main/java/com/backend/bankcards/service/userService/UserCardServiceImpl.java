@@ -10,7 +10,6 @@ import com.backend.bankcards.exception.InsufficientFundsException;
 import com.backend.bankcards.exception.ResourceNotFoundException;
 import com.backend.bankcards.repository.CardRepository;
 import com.backend.bankcards.repository.TransactionRepository;
-import jakarta.transaction.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -154,6 +154,85 @@ public class UserCardServiceImpl implements UserCardService {
                 ))
                 .toList();
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public TransactionResponseDTO getTransactionById(Long id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        TransactionEntity transaction = transactionRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found: " + id));
+
+        // Lazy obyektlarni tekshirishda xavfsiz usul
+        boolean isOwner = (transaction.getFromCard() != null && transaction.getFromCard().getUser().getUsername().equals(username)) ||
+                (transaction.getToCard() != null && transaction.getToCard().getUser().getUsername().equals(username));
+
+        if (!isOwner) {
+            throw new AccessDeniedException("Access denied to this transaction history");
+        }
+
+        return mapToTransactionResponse(transaction);
+    }
+
+    private TransactionResponseDTO mapToTransactionResponse(TransactionEntity t) {
+        return new TransactionResponseDTO(
+                t.getId(),
+                t.getFromCard() != null ? t.getFromCard().getMaskedNumber() : "N/A",
+                t.getToCard() != null ? t.getToCard().getMaskedNumber() : "N/A",
+                t.getAmount(),
+                t.getStatus(),
+                t.getCreatedAt()
+        );
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TransactionResponseDTO> getTransactionHistoryByCardId(Long cardId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Card card = cardRepo.findById(cardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Card not found with id: " + cardId));
+
+        if (!card.getUser().getUsername().equals(username)) {
+            log.warn("User {} tried to access transaction history of card ID {} which belongs to another user!", username, cardId);
+            throw new AccessDeniedException("You don't have permission to view this card's transactions");
+        }
+
+        List<TransactionEntity> transactions = transactionRepo.findAllByFromCardOrToCardOrderByCreatedAtDesc(card, card);
+
+        return transactions.stream()
+                .map(t -> new TransactionResponseDTO(
+                        t.getId(),
+                        t.getFromCard() != null ? t.getFromCard().getMaskedNumber() : "N/A",
+                        t.getToCard() != null ? t.getToCard().getMaskedNumber() : "N/A",
+                        t.getAmount(),
+                        t.getStatus(),
+                        t.getCreatedAt()
+                ))
+                .toList();
+    }
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal getCardBalance(Long cardId) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Card card = cardRepo.findById(cardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Card not found, ID: " + cardId));
+
+        if (!card.getUser().getUsername().equals(currentUsername)) {
+            log.warn("User {} tried to view balance of card ID {} which belongs to another user!", currentUsername, cardId);
+            throw new AccessDeniedException("You do not have permission to view this card balance!");
+        }
+        return card.getBalance();
+    }
+
+
 
 
 

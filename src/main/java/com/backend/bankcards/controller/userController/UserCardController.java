@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -47,6 +48,27 @@ public class UserCardController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TransactionResponseDTO>> getTransactions() {
         return ResponseEntity.ok(userCardService.getMyTransactionHistory());
+    }
+
+
+    @GetMapping("/transactions/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<TransactionResponseDTO> getTransactionDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(userCardService.getTransactionById(id));
+    }
+
+
+    @GetMapping("/{id}/transactions")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<TransactionResponseDTO>> getCardTransactions(@PathVariable Long id) {
+        return ResponseEntity.ok(userCardService.getTransactionHistoryByCardId(id));
+    }
+
+    @GetMapping("/{id}/balance")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<BigDecimal> getBalance(@PathVariable Long id) {
+        BigDecimal balance = userCardService.getCardBalance(id);
+        return ResponseEntity.ok(balance);
     }
 
 

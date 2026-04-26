@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<TransactionEntity,Long> {
     List<TransactionEntity> findAllByFromCardInOrToCardInOrderByCreatedAtDesc(List<Card> myCards, List<Card> myCards1);
+
+    List<TransactionEntity> findAllByFromCardOrToCardOrderByCreatedAtDesc(Card fromCard, Card toCard);
 }

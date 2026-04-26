@@ -130,7 +130,7 @@ public class UserManageServiceImpl implements UserManageService{
 
         if (updateRequest.role() != null && !updateRequest.role().equals(user.getRole().name())) {
             changes.append(String.format("Role[%s -> %s] ", user.getRole(), updateRequest.role()));
-            user.setRole(Role.valueOf(updateRequest.role()));
+            user.setRole(Role.valueOf(updateRequest.role().name()));
         }
 
         String finalDescription = changes.length() > 9 ? changes.toString() : "Update called, but no values changed.";
