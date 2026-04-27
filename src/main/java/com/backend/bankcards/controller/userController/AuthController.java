@@ -3,6 +3,7 @@ import com.backend.bankcards.dto.authDTO.AuthResponse;
 import com.backend.bankcards.dto.authDTO.LoginRequest;
 import com.backend.bankcards.dto.authDTO.RegisterRequest;
 import com.backend.bankcards.service.userService.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Auth Controller", description = "Endpoints for login and registering")
 public class AuthController {
 
     private final AuthService authService;
@@ -23,7 +25,6 @@ public class AuthController {
         authService.register(request);
         return ResponseEntity.ok("User registered successfully");
     }
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));

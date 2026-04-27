@@ -1,4 +1,4 @@
-package com.backend.bankcards.service.securityService;
+package com.backend.bankcards.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class EncryptionUtil {
     public EncryptionUtil(@Value("${app.encryption.key}") String key) {
         byte[] keyBytes = key.getBytes();
         if (keyBytes.length != 16 && keyBytes.length != 24 && keyBytes.length != 32) {
-            throw new IllegalArgumentException("Kritik xato: 'app.encryption.key' uzunligi 16, 24 yoki 32 belgi bo'lishi kerak!");
+            throw new IllegalArgumentException("Critical error: 'app.encryption.key' must be 16, 24 or 32 characters long!");
         }
         this.keySpec = new SecretKeySpec(keyBytes, algorithm);
     }
@@ -28,7 +28,7 @@ public class EncryptionUtil {
             byte[] encryptedBytes = cipher.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(encryptedBytes);
         } catch (Exception e) {
-            throw new RuntimeException("Shifrlashda xatolik: " + e.getMessage());
+            throw new RuntimeException("Encryption error: " + e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class EncryptionUtil {
             byte[] decryptedBytes = cipher.doFinal(decodedBytes);
             return new String(decryptedBytes);
         } catch (Exception e) {
-            throw new RuntimeException("Shifrdan yechishda xatolik: " + e.getMessage());
+            throw new RuntimeException("Decryption error: " + e.getMessage());
         }
     }
 }

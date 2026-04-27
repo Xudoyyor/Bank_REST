@@ -1,8 +1,8 @@
 package com.backend.bankcards.service.userService;
 
 import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
-import com.backend.bankcards.dto.cardsDTO.TransactionResponseDTO;
-import com.backend.bankcards.dto.cardsDTO.TransferRequest;
+import com.backend.bankcards.dto.TransactionResponseDTO;
+import com.backend.bankcards.dto.TransferRequest;
 import com.backend.bankcards.entity.Card;
 import com.backend.bankcards.entity.TransactionEntity;
 import com.backend.bankcards.enums.CardStatus;
@@ -30,7 +30,6 @@ public class UserCardServiceImpl implements UserCardService {
     private final CardRepository cardRepo;
 
     @Override
-    @Transactional
     public CardResponseDTO getMyCardById(Long cardId) {
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -62,7 +61,6 @@ public class UserCardServiceImpl implements UserCardService {
 
 
     @Override
-    @Transactional
     public void requestBlockCard(Long cardId) {
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -129,7 +127,6 @@ public class UserCardServiceImpl implements UserCardService {
 
 
     @Override
-    @Transactional(readOnly = true)
     public List<TransactionResponseDTO> getMyTransactionHistory() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -157,14 +154,12 @@ public class UserCardServiceImpl implements UserCardService {
 
 
     @Override
-    @Transactional(readOnly = true)
     public TransactionResponseDTO getTransactionById(Long id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         TransactionEntity transaction = transactionRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found: " + id));
 
-        // Lazy obyektlarni tekshirishda xavfsiz usul
         boolean isOwner = (transaction.getFromCard() != null && transaction.getFromCard().getUser().getUsername().equals(username)) ||
                 (transaction.getToCard() != null && transaction.getToCard().getUser().getUsername().equals(username));
 
@@ -189,7 +184,6 @@ public class UserCardServiceImpl implements UserCardService {
 
 
     @Override
-    @Transactional(readOnly = true)
     public List<TransactionResponseDTO> getTransactionHistoryByCardId(Long cardId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -218,7 +212,6 @@ public class UserCardServiceImpl implements UserCardService {
 
 
     @Override
-    @Transactional(readOnly = true)
     public BigDecimal getCardBalance(Long cardId) {
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 

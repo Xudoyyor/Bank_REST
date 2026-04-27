@@ -1,14 +1,13 @@
 package com.backend.bankcards.controller.userController;
 
 import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
-import com.backend.bankcards.dto.cardsDTO.TransactionResponseDTO;
-import com.backend.bankcards.dto.cardsDTO.TransferRequest;
+import com.backend.bankcards.dto.TransactionResponseDTO;
+import com.backend.bankcards.dto.TransferRequest;
 import com.backend.bankcards.service.userService.UserCardService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -29,7 +28,6 @@ public class UserCardController {
     }
 
     @PatchMapping("/{id}/block-requested")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<String> requestBlock(@PathVariable Long id) {
         userCardService.requestBlockCard(id);
         return ResponseEntity.ok("Your request to block your card has been received. It will be reviewed shortly.");
@@ -45,27 +43,23 @@ public class UserCardController {
 
 
     @GetMapping("/transactions")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TransactionResponseDTO>> getTransactions() {
         return ResponseEntity.ok(userCardService.getMyTransactionHistory());
     }
 
 
     @GetMapping("/transactions/{id}")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TransactionResponseDTO> getTransactionDetails(@PathVariable Long id) {
         return ResponseEntity.ok(userCardService.getTransactionById(id));
     }
 
 
     @GetMapping("/{id}/transactions")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<TransactionResponseDTO>> getCardTransactions(@PathVariable Long id) {
         return ResponseEntity.ok(userCardService.getTransactionHistoryByCardId(id));
     }
 
     @GetMapping("/{id}/balance")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<BigDecimal> getBalance(@PathVariable Long id) {
         BigDecimal balance = userCardService.getCardBalance(id);
         return ResponseEntity.ok(balance);

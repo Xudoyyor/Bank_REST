@@ -6,14 +6,15 @@ import com.backend.bankcards.dto.authDTO.RegisterRequest;
 import com.backend.bankcards.entity.UserEntity;
 import com.backend.bankcards.enums.Role;
 import com.backend.bankcards.repository.UserRepository;
-import com.backend.bankcards.service.securityService.JwtUtil;
+import com.backend.bankcards.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +26,9 @@ public class AuthServiceImpl implements AuthService{
     private final AuthenticationManager authenticationManager;
 
     @Override
-    @Transactional
     public void register(RegisterRequest request) {
         if (userRepository.findByUsername(request.username()).isPresent()) {
-            throw new RuntimeException("Username allaqachon band!");
+            throw new RuntimeException("Username is already busy");
         }
 
         UserEntity user = new UserEntity();
@@ -41,6 +41,7 @@ public class AuthServiceImpl implements AuthService{
         user.setRole(Role.ROLE_USER);
         user.setActive(true);
         user.setBlocked(false);
+        user.setLastLoginAt(LocalDateTime.now());
 
         userRepository.save(user);
     }
@@ -55,7 +56,9 @@ public class AuthServiceImpl implements AuthService{
         );
 
         UserEntity user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new RuntimeException("Foydalanuvchi topilmadi!"));
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+        user.setLastLoginAt(LocalDateTime.now());
+        userRepository.save(user);
 
 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());

@@ -6,6 +6,7 @@ import com.backend.bankcards.dto.usersDTO.UserResponseDTO;
 import com.backend.bankcards.dto.usersDTO.UserSearchFilter;
 import com.backend.bankcards.dto.usersDTO.UserUpdateDTO;
 import com.backend.bankcards.service.adminSerivice.UserManageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,16 +21,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/admin/users")
-//@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
+@Tag(name = "User Management for Admins", description = "Endpoints for managing users")
 public class UserManageController {
+
     private static final Logger log = LoggerFactory.getLogger(UserManageController.class);
 
     private final UserManageService userManageService;
 
 
     @PatchMapping("/{userId}/block")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> blockUser(@PathVariable Long userId) {
         userManageService.blockUser(userId);
         return ResponseEntity.ok(Map.of("message", "User blocked successfully"));
@@ -37,21 +38,18 @@ public class UserManageController {
 
 
     @PatchMapping("/{userId}/activate")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> activateUser(@PathVariable Long userId) {
         userManageService.activateUser(userId);
         return ResponseEntity.ok(Map.of("message", "User activated successfully"));
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(userManageService.getUserById(userId));
     }
 
 
     @PutMapping("/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long userId,
             @RequestBody @Valid UserUpdateDTO updateRequest) { // @Valid - xavfsizlik uchun
@@ -60,7 +58,6 @@ public class UserManageController {
 
 
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long userId) {
         userManageService.softDeleteUser(userId);
         return ResponseEntity.ok(Map.of(
@@ -72,7 +69,6 @@ public class UserManageController {
 
 
     @GetMapping("/{userId}/audit")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AuditLogResponseDTO>> getUserAuditHistory(@PathVariable Long userId) {
         List<AuditLogResponseDTO> history = userManageService.getUserAuditHistory(userId);
         return ResponseEntity.ok(history);
@@ -80,7 +76,6 @@ public class UserManageController {
 
 
     @GetMapping("/search")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<UserResponseDTO>> searchUsers(@ModelAttribute UserSearchFilter filter) {
         log.info("Admin searching users with filter: {}", filter);
         Page<UserResponseDTO> result = userManageService.searchUsers(filter);
@@ -88,7 +83,6 @@ public class UserManageController {
     }
 
     @GetMapping("/{id}/cards")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CardResponseDTO>> getUserCards(@PathVariable Long id) {
         log.info("REST request to get all cards for user ID: {}", id);
         List<CardResponseDTO> cards = userManageService.getUserCards(id);

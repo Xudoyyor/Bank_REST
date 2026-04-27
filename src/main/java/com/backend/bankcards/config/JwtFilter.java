@@ -1,14 +1,12 @@
 package com.backend.bankcards.config;
 
-import com.backend.bankcards.service.securityService.CustomUserDetailService;
-import com.backend.bankcards.service.securityService.CustomUserDetailService;
-import com.backend.bankcards.service.securityService.JwtUtil;
+import com.backend.bankcards.security.CustomUserDetailService;
+import com.backend.bankcards.security.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,8 +31,19 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain)
             throws ServletException, IOException {
+        String path = request.getServletPath();
+
+        if (path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/swagger-resources") ||
+                path.startsWith("/webjars")) {
+
+            chain.doFilter(request, response);
+            return;
+        }
 
         String header = request.getHeader("Authorization");
+
 
         try {
 
@@ -43,13 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String token = header.substring(7);
 
                 if (jwtUtil.isExpired(token)) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    response.setContentType("application/json");
-
-                    response.getWriter().write(
-                            "{\"error\": \"Token expired\"}"
-                    );
-                    return;
+                    throw new RuntimeException("Token expired");
                 }
 
                 String username = jwtUtil.extractUsername(token);
@@ -73,14 +76,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
             chain.doFilter(request, response);
 
-        } catch (ExpiredJwtException | IOException ex) {
-
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-
-            response.getWriter().write(
-                    "{\"error\": \"Token expired\"}"
-            );
+        } catch (Exception ex) {
+            SecurityContextHolder.clearContext();
+            throw ex;
         }
     }
 }

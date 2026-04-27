@@ -1,4 +1,4 @@
-package com.backend.bankcards.dto.cardsDTO;
+package com.backend.bankcards.dto;
 
 import java.math.BigDecimal;
 

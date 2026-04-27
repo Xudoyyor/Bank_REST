@@ -77,7 +77,6 @@ public class UserManageServiceImpl implements UserManageService{
 
 
     @Override
-    @Transactional(readOnly = true)
     public UserResponseDTO getUserById(Long userId) {
         UserEntity targetUser = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User with ID " + userId + " not found"));
@@ -133,8 +132,6 @@ public class UserManageServiceImpl implements UserManageService{
             user.setRole(Role.valueOf(updateRequest.role().name()));
         }
 
-        String finalDescription = changes.length() > 9 ? changes.toString() : "Update called, but no values changed.";
-
         userRepo.save(user);
 
         saveAuditLog(
@@ -178,15 +175,12 @@ public class UserManageServiceImpl implements UserManageService{
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<AuditLogResponseDTO> getUserAuditHistory(Long userId) {
         if (!userRepo.existsById(userId)) {
             throw new ResourceNotFoundException("User not found with id: " + userId);
         }
 
         List<AuditLog> logs = auditLogRepo.findHistoryByUserId(userId);
-
-
         return logs.stream()
                 .map(log -> new AuditLogResponseDTO(
                         log.getId(),
@@ -197,7 +191,6 @@ public class UserManageServiceImpl implements UserManageService{
                 ))
                 .collect(Collectors.toList());
     }
-
 
     private String getCurrentAdminUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
@@ -218,14 +211,12 @@ public class UserManageServiceImpl implements UserManageService{
 
 
     @Override
-    @Transactional(readOnly = true)
     public Page<UserResponseDTO> searchUsers(UserSearchFilter filter) {
         int pageIndex = (filter.page() == null) ? 0 : filter.page();
         int pageSize = (filter.size() == null || filter.size() <= 0) ? 10 : filter.size();
 
         Pageable pageable = PageRequest.of(Math.max(pageIndex, 0), pageSize);
 
-        // 2. Repository-dan ma'lumotni qidirish
         Page<UserEntity> users = userRepo.searchByFilter(
                 filter.query(),
                 filter.email(),
@@ -235,7 +226,6 @@ public class UserManageServiceImpl implements UserManageService{
                 pageable
         );
 
-        // 3. Entity-ni ResponseDTO-ga o'girish
         return users.map(user -> new UserResponseDTO(
                 user.getId(),
                 user.getFirstName(),
@@ -249,7 +239,6 @@ public class UserManageServiceImpl implements UserManageService{
         ));
     }
     @Override
-    @Transactional(readOnly = true)
     public List<CardResponseDTO> getUserCards(Long userId) {
         UserEntity user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));

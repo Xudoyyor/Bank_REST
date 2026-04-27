@@ -5,6 +5,7 @@ import com.backend.bankcards.dto.cardsDTO.CardCreateRequestDTO;
 import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
 import com.backend.bankcards.dto.cardsDTO.CardSearchFilter;
 import com.backend.bankcards.service.adminSerivice.CardManageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,13 +22,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin/cards")
 @RequiredArgsConstructor
+@Tag(name = "Card Management for Admins", description = "Endpoints for managing cards")
 public class CardManageController {
     private static final Logger log = LoggerFactory.getLogger(CardManageController.class);
 
     private final CardManageService cardManageService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CardResponseDTO> createCard(@RequestBody @Valid CardCreateRequestDTO requestDTO) {
         CardResponseDTO response = cardManageService.createCard(requestDTO);
 
@@ -36,7 +37,6 @@ public class CardManageController {
 
 
     @PatchMapping("/{id}/block")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> blockCard(@PathVariable Long id) {
         log.info("REST request to block card ID: {}", id);
         cardManageService.blockCard(id);
@@ -45,7 +45,6 @@ public class CardManageController {
 
 
     @PatchMapping("/{id}/activate")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> activateCard(@PathVariable Long id) {
         log.info("REST request to activate card ID: {}", id);
         cardManageService.activateCard(id);
@@ -54,7 +53,6 @@ public class CardManageController {
 
 
     @GetMapping("/{id}/history")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AuditLogResponseDTO>> getCardHistory(@PathVariable Long id) {
         log.info("REST request to get history for card ID: {}", id);
         List<AuditLogResponseDTO> history = cardManageService.getCardAuditHistory(id);
@@ -63,7 +61,6 @@ public class CardManageController {
 
 
     @GetMapping("/top-balance")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CardResponseDTO>> getTopCards(
             @RequestParam(defaultValue = "10") int limit) {
 
@@ -73,7 +70,6 @@ public class CardManageController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<CardResponseDTO>> searchCards(@ModelAttribute CardSearchFilter filter) {
         log.info("REST request to search cards with filter: {}", filter);
         Page<CardResponseDTO> result = cardManageService.searchCards(filter);

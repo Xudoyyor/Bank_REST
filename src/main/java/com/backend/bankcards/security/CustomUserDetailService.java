@@ -1,4 +1,4 @@
-package com.backend.bankcards.service.securityService;
+package com.backend.bankcards.security;
 
 import com.backend.bankcards.entity.UserEntity;
 import com.backend.bankcards.repository.UserRepository;

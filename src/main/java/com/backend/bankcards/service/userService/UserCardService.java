@@ -1,8 +1,8 @@
 package com.backend.bankcards.service.userService;
 
 import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
-import com.backend.bankcards.dto.cardsDTO.TransactionResponseDTO;
-import com.backend.bankcards.dto.cardsDTO.TransferRequest;
+import com.backend.bankcards.dto.TransactionResponseDTO;
+import com.backend.bankcards.dto.TransferRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
