@@ -134,14 +134,14 @@ src/main/java/com/backend/bankcards/
 
 ### Prerequisites
 
-- Java 17+
-- PostgreSQL 14+
-- Maven 3.8+
+- Java 25+
+- PostgreSQL 15+
+- Gradle
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/bank-cards-backend.git
+git clone https://github.com/Xudoyyor/Bank_REST.git
 cd bank-cards-backend
 ```
 
@@ -149,14 +149,15 @@ cd bank-cards-backend
 ### 2. Configure `application.properties`
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/bankcards
-spring.datasource.username=your_db_user
-spring.datasource.password=your_db_password
+spring.application.name=bankcards
+spring.datasource.url=jdbc:postgresql://localhost:5442/bank-rest_db
+spring.datasource.username=hudoyor
+spring.datasource.password=root
 
-spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=validate
 spring.jpa.show-sql=true
 
-jwt.secret=your_jwt_secret_key
+jwt.secret=1234567890123456
 jwt.expiration=86400000
 ```
 
