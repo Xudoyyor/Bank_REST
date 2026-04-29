@@ -1,8 +1,8 @@
 package com.backend.bankcards.controller.userController;
 
 import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
-import com.backend.bankcards.dto.TransactionResponseDTO;
-import com.backend.bankcards.dto.TransferRequest;
+import com.backend.bankcards.dto.transactionDTO.TransactionResponseDTO;
+import com.backend.bankcards.dto.transactionDTO.TransferRequest;
 import com.backend.bankcards.service.userService.UserCardService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -36,7 +36,7 @@ public class UserCardController {
 
     @PostMapping("/transfer")
     public ResponseEntity<String> transfer(@RequestBody @Valid TransferRequest request) {
-        userCardService.transferBetweenMyCards(request);
+        userCardService.transfer(request);
         return ResponseEntity.ok("The transfer was successful.");
     }
 

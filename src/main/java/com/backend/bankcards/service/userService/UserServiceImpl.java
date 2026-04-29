@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
                 user.getEmail(),
                 user.getPhone(),
                 user.getRole(),
-                user.getActive(),
+                user.getIsActive(),
                 user.getCreatedAt()
         );
     }
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService{
                 updatedUser.getEmail(),
                 updatedUser.getPhone(),
                 updatedUser.getRole(),
-                updatedUser.getActive(),
+                updatedUser.getIsActive(),
                 updatedUser.getCreatedAt()
         );
     }

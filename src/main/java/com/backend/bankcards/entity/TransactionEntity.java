@@ -3,11 +3,19 @@ package com.backend.bankcards.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "transactions")
 public class TransactionEntity {
 
@@ -43,51 +51,4 @@ public class TransactionEntity {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Card getFromCard() {
-        return fromCard;
-    }
-
-    public void setFromCard(Card fromCard) {
-        this.fromCard = fromCard;
-    }
-
-    public Card getToCard() {
-        return toCard;
-    }
-
-    public void setToCard(Card toCard) {
-        this.toCard = toCard;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-}
+  }

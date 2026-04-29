@@ -52,11 +52,11 @@ public class CardManageServiceImpl implements CardManageService {
             UserEntity user = userRepo.findById(request.userId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found: " + request.userId()));
 
-            if (user.getBlocked() != null && user.getBlocked()) {
+            if (user.getIsBlocked() != null && user.getIsBlocked()) {
                 throw new RuntimeException("It is not possible to open a card for a blocked user!");
             }
 
-            if (user.getActive() != null && !user.getActive()) {
+            if (user.getIsActive() != null && !user.getIsActive()) {
                 throw new RuntimeException("User profile is inactive!");
             }
 

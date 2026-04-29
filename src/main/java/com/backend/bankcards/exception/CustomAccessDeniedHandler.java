@@ -1,4 +1,4 @@
-package com.backend.bankcards.config;
+package com.backend.bankcards.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

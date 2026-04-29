@@ -44,8 +44,8 @@ public class UserManageServiceImpl implements UserManageService{
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
 
-        user.setBlocked(true);
-        user.setActive(false);
+        user.setIsBlocked(true);
+        user.setIsActive(false);
         userRepo.save(user);
 
         saveAuditLog(user, "USER_BLOCKED", "Admin " + adminUsername + " blocked user " + user.getUsername(), adminUsername);
@@ -62,8 +62,8 @@ public class UserManageServiceImpl implements UserManageService{
         UserEntity user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        user.setBlocked(false);
-        user.setActive(true);
+        user.setIsBlocked(false);
+        user.setIsActive(true);
         userRepo.save(user);
 
         saveAuditLog(
@@ -89,7 +89,7 @@ public class UserManageServiceImpl implements UserManageService{
                 targetUser.getEmail(),
                 targetUser.getPhone(),
                 targetUser.getRole(),
-                targetUser.getActive(),
+                targetUser.getIsActive(),
                 targetUser.getCreatedAt()
         );
     }
@@ -149,7 +149,7 @@ public class UserManageServiceImpl implements UserManageService{
                 user.getEmail(),
                 user.getPhone(),
                 user.getRole(),
-                user.getActive(),
+                user.getIsActive(),
                 user.getCreatedAt()
         );
     }
@@ -163,7 +163,7 @@ public class UserManageServiceImpl implements UserManageService{
         UserEntity user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        user.setActive(false);
+        user.setIsActive(false);
         userRepo.save(user);
 
         saveAuditLog(
@@ -234,7 +234,7 @@ public class UserManageServiceImpl implements UserManageService{
                 user.getEmail(),
                 user.getPhone(),
                 user.getRole(),
-                user.getActive(),
+                user.getIsActive(),
                 user.getCreatedAt()
         ));
     }

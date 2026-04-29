@@ -1,4 +1,6 @@
 package com.backend.bankcards.config;
+import com.backend.bankcards.exception.CustomAccessDeniedHandler;
+import com.backend.bankcards.exception.CustomAuthenticationEntryPoint;
 import com.backend.bankcards.security.CustomUserDetailService;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;

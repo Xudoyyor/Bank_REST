@@ -1,8 +1,8 @@
 package com.backend.bankcards.service.userService;
 
 import com.backend.bankcards.dto.cardsDTO.CardResponseDTO;
-import com.backend.bankcards.dto.TransactionResponseDTO;
-import com.backend.bankcards.dto.TransferRequest;
+import com.backend.bankcards.dto.transactionDTO.TransactionResponseDTO;
+import com.backend.bankcards.dto.transactionDTO.TransferRequest;
 import com.backend.bankcards.entity.Card;
 import com.backend.bankcards.entity.TransactionEntity;
 import com.backend.bankcards.enums.CardStatus;
@@ -84,7 +84,7 @@ public class UserCardServiceImpl implements UserCardService {
 
     @Override
     @Transactional
-    public void transferBetweenMyCards(TransferRequest request) {
+    public void transfer(TransferRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Card fromCard = cardRepo.findById(request.fromCardId())

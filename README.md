@@ -395,6 +395,12 @@ All errors return a structured JSON response:
 
 ---
 
+## 🧪 Testing
+
+To run only unit tests (without database dependency):
+```bash
+./gradlew test --tests UserCardServiceImplTest
+
 ## 📝 Notes
 
 - Card numbers are stored as hashed/masked values — the full number is never exposed in responses.

@@ -5,12 +5,20 @@ import com.backend.bankcards.enums.CardStatus;
 import com.backend.bankcards.enums.CardType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "cards")
 public class Card {
 
@@ -68,13 +76,6 @@ public class Card {
     @Column(name = "status_changed_by")
     private String statusChangedBy;
 
-    public String getStatusChangedBy() {
-        return statusChangedBy;
-    }
-
-    public void setStatusChangedBy(String statusChangedBy) {
-        this.statusChangedBy = statusChangedBy;
-    }
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
@@ -105,138 +106,4 @@ public class Card {
     @Column(name = "cvv_hash", nullable = false)
     private String cvvHash;
 
-
-    public String getCvvHash() {
-        return cvvHash;
-    }
-
-    public void setCvvHash(String cvvHash) {
-        this.cvvHash = cvvHash;
-    }
-
-
-
-
-
-    public CardCategory getCardCategory() {
-        return cardCategory;
-    }
-
-    public void setCardCategory(CardCategory cardCategory) {
-        this.cardCategory = cardCategory;
-    }
-
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    public CardType getCardType() {
-        return cardType;
-    }
-
-    public void setCardType(CardType cardType) {
-        this.cardType = cardType;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getMaskedNumber() {
-        return maskedNumber;
-    }
-
-    public void setMaskedNumber(String maskedNumber) {
-        this.maskedNumber = maskedNumber;
-    }
-
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public CardStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(CardStatus status) {
-        this.status = status;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-
-
-
-
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
 }

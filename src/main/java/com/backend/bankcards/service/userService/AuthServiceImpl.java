@@ -39,8 +39,8 @@ public class AuthServiceImpl implements AuthService{
         user.setEmail(request.email());
         user.setPhone(request.phone());
         user.setRole(Role.ROLE_USER);
-        user.setActive(true);
-        user.setBlocked(false);
+        user.setIsActive(true);
+        user.setIsBlocked(false);
         user.setLastLoginAt(LocalDateTime.now());
 
         userRepository.save(user);
