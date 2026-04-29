@@ -41,4 +41,6 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     List<Card> findTopBalanceCards(Pageable pageable);
 
     List<Card> findAllByUserUsername(String username);
+
+    Card findByStatus(CardStatus cardStatus);
 }

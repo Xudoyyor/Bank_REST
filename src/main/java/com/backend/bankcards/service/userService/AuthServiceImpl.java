@@ -5,6 +5,8 @@ import com.backend.bankcards.dto.authDTO.LoginRequest;
 import com.backend.bankcards.dto.authDTO.RegisterRequest;
 import com.backend.bankcards.entity.UserEntity;
 import com.backend.bankcards.enums.Role;
+import com.backend.bankcards.exception.ResourceNotFoundException;
+import com.backend.bankcards.exception.UsernameAlreadyExistsException;
 import com.backend.bankcards.repository.UserRepository;
 import com.backend.bankcards.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public void register(RegisterRequest request) {
         if (userRepository.findByUsername(request.username()).isPresent()) {
-            throw new RuntimeException("Username is already busy");
+            throw new UsernameAlreadyExistsException("Username is already busy");
         }
 
         UserEntity user = new UserEntity();
@@ -56,7 +58,7 @@ public class AuthServiceImpl implements AuthService{
         );
 
         UserEntity user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new RuntimeException("User not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
         user.setLastLoginAt(LocalDateTime.now());
         userRepository.save(user);
 

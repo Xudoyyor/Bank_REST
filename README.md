@@ -100,7 +100,8 @@ src/main/java/com/backend/bankcards/
 |    ├── ResourceNotFoundException.java
 |    ├── InsufficientFundsException.java
 |    ├── CustomAccessDeniedHandler.java     # 403 handler
-│    └── CustomAuthenticationEntryPoint.java # 401 handler
+│    ├── CustomAuthenticationEntryPoint.java # 401 handler
+│    └── UsernameAlreadyExistsException.java # 409 handler
 |
 |
 └── security/

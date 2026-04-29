@@ -50,6 +50,15 @@ public class GlobalExceptionHandler {
         return createErrorResponse(HttpStatus.PAYMENT_REQUIRED, "Insufficient Funds", ex.getMessage());
     }
 
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<?> handleUsernameExists(UsernameAlreadyExistsException ex) {
+        return createErrorResponse(
+                HttpStatus.CONFLICT,
+                "Conflict",
+                ex.getMessage()
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
