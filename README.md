@@ -37,7 +37,7 @@ This backend application provides a full-featured bank card management system wi
 | ORM | Spring Data JPA / Hibernate |
 | API Docs | SpringDoc OpenAPI (Swagger UI) |
 | Validation | Jakarta Bean Validation |
-| Build Tool | Maven |
+| Build Tool | Gradle |
 
 ---
 
