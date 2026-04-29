@@ -142,7 +142,7 @@ src/main/java/com/backend/bankcards/
 
 ```bash
 git clone https://github.com/Xudoyyor/Bank_REST.git
-cd bank-cards-backend
+cd Bank_REST
 ```
 
 
@@ -192,11 +192,11 @@ http://localhost:8085/swagger-ui/index.html
 **Register request body:**
 ```json
 {
-  "username": "johndoe",
+  "username": "Tycoon",
   "password": "securepass",
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john@example.com",
+  "firstName": "Xudoyyor",
+  "lastName": "Davronov",
+  "email": "dhudoyor.icloud.com",
   "phone": "+998901234567"
 }
 ```
@@ -205,7 +205,7 @@ http://localhost:8085/swagger-ui/index.html
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9...",
-  "username": "johndoe",
+  "username": "Tycoon",
   "role": "ROLE_USER"
 }
 ```
